@@ -46,8 +46,8 @@ ADD dewey_demo/kick* /root/
 
 
 # STEP 23: Set the default command to run when workflow engine
-CMD [ " /docker-entrypoint/service-start.sh "]
-#cmd [ "/bin/bash "] 
+#CMD [ " /docker-entrypoint/service-start.sh "]
+cmd [ "/bin/bash "] 
 
 
 
