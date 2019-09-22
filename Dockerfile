@@ -3,7 +3,7 @@ FROM centos:centos7
 MAINTAINER Steve Langer <sglanger@fastmail.COM>
 ###############################################################
 # ansible-docker
-# extensions to postgresql for DDW
+# this is a conversion of DB's Vagrant for EWOCS to a Docker
 #
 # External files: "ADD" lines below and
 #		run_ddw_db.sh
@@ -22,9 +22,13 @@ RUN yum install -y net-tools
 RUN yum install -y install nmap
 #RUN yum install -y install openssh
 RUN yum install -y epel-release
-#RUN yum install -y ansible
+RUN yum install -y ansible
 
 #####  setup the ansible stuff
+ADD dewey_demo/playbook /root/playbook
+ADD dewey_demo/scripts /root/scripts
+ADD dewey_demo/*json /root/
+ADD dewey_demo/kick* /root/
 
 
 ########### expose ports used by this docker
@@ -42,8 +46,8 @@ RUN yum install -y epel-release
 
 
 # STEP 23: Set the default command to run when workflow engine
-#CMD [ " /docker-entrypoint/service-start.sh "]
-cmd [ "/bin/bash "] 
+CMD [ " /docker-entrypoint/service-start.sh "]
+#cmd [ "/bin/bash "] 
 
 
 

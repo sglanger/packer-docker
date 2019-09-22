@@ -69,7 +69,7 @@ case "$1" in
 		# the trick is to know the IP before the docker is created, and yes it is a trick
 		#sudo docker run -p 172.17.0.2:22:2022  --name $instance  -d $image
 		#sudo docker run --net="host" --name $instance  -d $image
-		sudo docker run  -it   $image /docker-entrypoint/service-start.sh
+		sudo docker run  -it   $image /docker-entrypoint/service-start.sh 
 		sleep 3
 		sudo docker ps
 		#sudo docker exec  $instance /docker-entrypoint/service-start.sh
