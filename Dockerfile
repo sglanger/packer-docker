@@ -25,10 +25,10 @@ RUN yum install -y epel-release
 # RUN yum install -y ansible
 
 #####  setup the ansible stuff
-ADD dewey_demo/playbook /root/playbook
-ADD dewey_demo/scripts /root/scripts
-ADD dewey_demo/*json /root/
-ADD dewey_demo/kick* /root/
+#ADD dewey_demo/playbook /root/playbook
+#ADD dewey_demo/scripts /root/scripts
+#ADD dewey_demo/*json /root/
+#ADD dewey_demo/kick* /root/
 
 
 ########### expose ports used by this docker
