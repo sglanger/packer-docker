@@ -20,6 +20,8 @@ clear
 host="127.0.0.1"
 image="ansible-docker"
 instance="ansi"
+cwd=$(pwd)
+echo $cwd
 
 case "$1" in
 	build)
@@ -28,21 +30,15 @@ case "$1" in
 		sudo docker stop $instance
 		sudo docker rmi -f $image
 		sudo docker rm $instance
+		sudo docker system prune
 
-		# now build from clean. The DOcker run line uses --net="host" term to expose the docker
-		# on the Host's NIC. For better security, remove it
+		# now build from clean. 
 		sudo docker build --rm=true -t $image .
-		# WHen both this and the ddw-gw DOcker use HOST, their Postgres instances collide in namespace
-		# but we no longer expose the gway Postgres
 		$0 start
 	;;
 
+
 	conn)
-		sudo docker exec -it $instance /bin/bash 
-	;;
-
-
-	conn_r)
 		sudo docker exec -u root -it $instance /bin/bash
 	;;
 
@@ -57,22 +53,27 @@ case "$1" in
 	;;
 
 	stop)
-		# stops but does not remove image from DOcker engine/dewey 
+		# stops Instance but does not remove Image from DOcker engine 
 		sudo docker stop $instance
-		sudo docker rm $instance
+		sudo docker rm -f $instance
+		$0 status
 	;;
 
 	start)
+		sudo docker rm -f $instance
 		# here we launch DOcker w/out the --net="host" tag , but then no ports are exposed including 104
 		# so we expose them one at a time with -p switches on the container address
 		# host=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' $instance)
 		# the trick is to know the IP before the docker is created, and yes it is a trick
 		#sudo docker run -p 172.17.0.2:22:2022  --name $instance  -d $image
 		#sudo docker run --net="host" --name $instance  -d $image   -v /home/dewey:/mnt/dewey
-		sudo docker run -v /home/dewey:/mnt/dewey -it   $image /docker-entrypoint/service-start.sh 
+		sudo docker run --rm --name $instance \
+			-v $cwd:/mnt \
+			-v $cwd/app:/app \
+			-p 2221:21 \
+			-id   --entrypoint  /docker-entrypoint//service-start.sh $image 
 		sleep 3
-		sudo docker ps
-		#sudo docker exec  $instance /docker-entrypoint/service-start.sh
+		$0 status
 	;;
 
 	*)
