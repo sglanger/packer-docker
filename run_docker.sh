@@ -71,7 +71,7 @@ case "$1" in
 			-v $cwd:/mnt \
 			-v $cwd/app:/app \
 			-p 2221:21 \
-			-id   --entrypoint  /docker-entrypoint//service-start.sh $image 
+			-id   --entrypoint  /docker-entrypoint/service-start.sh $image 
 		sleep 3
 		$0 status
 	;;
